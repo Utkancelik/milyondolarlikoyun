@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public Vector2 currentCheckpoint;
     private CharacterController2D controller;
     private Animator animator;
 
@@ -27,7 +29,12 @@ public class PlayerMovement : MonoBehaviour
             jump = true;
             animator.SetBool("isJumping", true);
         }
-            
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            TeleportCheckpoint();
+        }
+
     }
 
     public void OnLanding()
@@ -39,5 +46,11 @@ public class PlayerMovement : MonoBehaviour
     {
         controller.Move(horizontalInput * Time.fixedDeltaTime * runSpeed, false, jump);
         jump = false;   
+    }
+
+    public void TeleportCheckpoint()
+    {
+        transform.position = currentCheckpoint;
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }

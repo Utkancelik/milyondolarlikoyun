@@ -29,6 +29,10 @@ public class PlayerCombat : MonoBehaviour
                 nextAttackTime = Time.time + 1f / attackRate;
             }
         }
+        else
+        {
+            animator.ResetTrigger("Attack");
+        }
         
     }
 

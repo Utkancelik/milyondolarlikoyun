@@ -11,6 +11,9 @@ public class PlayerCombat : MonoBehaviour
     public LayerMask enemyLayer;
     public int attackDamage = 20;
 
+
+    public float attackRate = 2.0f;
+    private float nextAttackTime = 0.0f;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -18,10 +21,15 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Time.time > nextAttackTime)
         {
-            Attack();
+            if (Input.GetMouseButtonDown(0))
+            {
+                Attack();
+                nextAttackTime = Time.time + 1f / attackRate;
+            }
         }
+        
     }
 
     private void Attack()

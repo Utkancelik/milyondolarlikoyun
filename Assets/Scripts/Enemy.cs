@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
-
+    public bool isDead = false;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -34,8 +34,14 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        animator.SetBool("isDead", true);
+        isDead = true;
 
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+        animator.SetBool("isDead", true);
+        animator.SetBool("isRunning", false);
+        
+        animator.Play(gameObject.name + "_Death");
         GetComponent<BoxCollider2D>().enabled = false;
         this.enabled = false;
     }

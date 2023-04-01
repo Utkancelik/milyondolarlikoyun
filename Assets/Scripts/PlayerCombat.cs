@@ -14,9 +14,19 @@ public class PlayerCombat : MonoBehaviour
 
     public float attackRate = 2.0f;
     private float nextAttackTime = 0.0f;
+
+    public int maxHealth = 100;
+    public int currentHealth;
+
+    public bool isDead = false;
     private void Awake()
     {
         animator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        currentHealth = maxHealth;
     }
 
     private void Update()
@@ -57,5 +67,32 @@ public class PlayerCombat : MonoBehaviour
         }
 
         Gizmos.DrawSphere(attackPoint.position, attackRange);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        animator.SetTrigger("Hurt");
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+        animator.SetBool("isDead", true);
+
+        GetComponent<BoxCollider2D>().enabled = false;
+        GetComponent<CircleCollider2D>().enabled = false;
+        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+
+        this.enabled = false;
     }
 }

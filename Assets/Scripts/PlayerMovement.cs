@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController2D>();
         animator = GetComponent<Animator>();
+        transform.position = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
+        currentCheckpoint = transform.position;
     }
 
     private void Update()

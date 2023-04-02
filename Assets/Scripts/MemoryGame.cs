@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
 
 
 public class MemoryGame : MonoBehaviour
 {
+    [SerializeField] GameObject videoObject;
+    [SerializeField] VideoPlayer videoPlayer;
     [SerializeField] public TMP_Text instructionsText;
     private List<Sprite> normalPhotos;
     private List<Sprite> selectedPhotos;
@@ -77,11 +80,30 @@ public class MemoryGame : MonoBehaviour
             if (truePressed == 3)
             {
                 instructionsText.text = "You won!";
+                Invoke("Win", 0.5f);
             }
             else
             {
                 instructionsText.text = "You lost! Try again.";
             }
         }
+    }
+    public void Win()
+    {
+        gameObject.SetActive(false);
+        Flashback();
+    }
+    private void OnVideoFinished(VideoPlayer vp)
+    {
+        videoObject.SetActive(false);
+        vp.Stop();
+    }
+    public void Flashback()
+    {
+        videoPlayer.Play();
+        videoObject.SetActive(true);
+        videoPlayer.time = 0f;
+
+        videoPlayer.loopPointReached += OnVideoFinished;
     }
 }

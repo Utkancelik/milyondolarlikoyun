@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - ButtonObject
+  - Trap
+  - StartPoint
+  - EndPoint
+  - FinalVideo
   layers:
   - Default
   - TransparentFX

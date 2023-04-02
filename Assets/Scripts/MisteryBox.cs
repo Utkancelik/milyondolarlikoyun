@@ -4,30 +4,66 @@ using UnityEngine;
 
 public class MisteryBox : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private GameObject menuCanvas;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private bool inTriggerArea;
+    private bool menuOpen;
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            inTriggerArea = true;
             PlayerMovement playerMovement = other.GetComponent<PlayerMovement>();
             if (playerMovement != null)
             {
-                playerMovement.currentCheckpoint = transform.position;
+                playerMovement.currentCheckpoint = new Vector2(transform.position.x + 0.5f, transform.position.y + 2);
                 Debug.Log(playerMovement.currentCheckpoint);
             }
         }
     }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            inTriggerArea = false;
+            CloseMenu();
+        }
+    }
+
+    private void Update()
+    {
+        if (inTriggerArea && Input.GetKeyDown(KeyCode.E))
+        {
+            if (!menuOpen)
+            {
+                OpenMenu();
+            }
+            else
+            {
+                CloseMenu();
+            }
+        }
+
+        if (inTriggerArea && menuOpen && Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseMenu();
+        }
+    }
+
+    private void OpenMenu()
+    {
+        menuOpen = true;
+        menuCanvas.SetActive(true);
+    }
+
+    private void CloseMenu()
+    {
+        menuOpen = false;
+        menuCanvas.SetActive(false);
+    }
+
 
     
 }

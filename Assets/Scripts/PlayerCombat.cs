@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    private Animator animator;
-
+    public AudioSource source;
+    public Animator animator;
+    public AudioClip hurtsound, attacksound, diesound;
     public Transform attackPoint;
     public float attackRange;
     public LayerMask enemyLayer;
@@ -43,12 +44,16 @@ public class PlayerCombat : MonoBehaviour
         {
             animator.ResetTrigger("Attack");
         }
+
+
         
     }
 
-    private void Attack()
+    public void Attack()
     {
         animator.SetTrigger("Attack");
+        source.clip = attacksound;
+        source.Play();
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
 
@@ -74,10 +79,25 @@ public class PlayerCombat : MonoBehaviour
         currentHealth -= damage;
 
         animator.SetTrigger("Hurt");
+        source.clip = hurtsound;
+        source.Play();
 
         if (currentHealth <= 0)
         {
             Die();
+        }
+        else
+        {
+            isDead = false;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if the collision object has the tag 'Trap'
+        if (collision.gameObject.CompareTag("Trap"))
+        {
+            TakeDamage(maxHealth);
         }
     }
 
@@ -88,10 +108,13 @@ public class PlayerCombat : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         animator.SetBool("isDead", true);
+        source.clip = diesound;
+        source.Play();
 
-        GetComponent<BoxCollider2D>().enabled = false;
-        GetComponent<CircleCollider2D>().enabled = false;
-        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+
+
+        GameManager gm = FindObjectOfType<GameManager>();
+        gm.Invoke("DieGame", 0.75f);
 
         this.enabled = false;
     }

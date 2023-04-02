@@ -6,6 +6,7 @@ using TMPro;
 
 public class GridGame : MonoBehaviour
 {
+    [SerializeField] private GameObject RewardPage;
     [SerializeField] private TMP_Text instructionsText;
     [SerializeField] private Button[,] gridButtons;
     private bool isPlaying;
@@ -117,12 +118,18 @@ public class GridGame : MonoBehaviour
             if (greenPressed == 5)
             {
                 instructionsText.text = "Won!";
+                Invoke("Win", 0.5f);
             }
             else
             {
                 instructionsText.text = "Try again.";
             }
         }
+    }
+    public void Win()
+    {
+        gameObject.SetActive(false);
+        RewardPage.SetActive(true);
     }
 }
 

@@ -146,9 +146,11 @@ public class EnemyPatrol : MonoBehaviour
 
     private void FlipSprite()
     {
+        
         Vector3 localScale = transform.localScale;
         localScale.x *= -1;
         transform.localScale = localScale;
+        
     }
 
     private void OnDrawGizmosSelected()

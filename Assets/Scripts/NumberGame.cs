@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using TMPro;
 
 public class NumberGame : MonoBehaviour
 {
+    [SerializeField] GameObject videoObject1;
+    [SerializeField] VideoPlayer videoPlayer1;
+    [SerializeField] GameObject videoObject2;
+    [SerializeField] VideoPlayer videoPlayer2;
     public TMP_Text[] numberDisplay;
     public TMP_InputField[] answerFields;
     public TMP_Text resultDisplay;
@@ -33,6 +38,7 @@ public class NumberGame : MonoBehaviour
 
             CheckAnswers();
         }
+
     }
 
     public void CheckAnswers()
@@ -59,6 +65,7 @@ public class NumberGame : MonoBehaviour
         if (allCorrect)
         {
             resultDisplay.text = "You win!";
+            Invoke("Win", 0.5f);
         }
         else
         {
@@ -101,6 +108,34 @@ public class NumberGame : MonoBehaviour
         {
             numberDisplay[i].transform.parent.gameObject.SetActive(false);
             
+        }
+    }
+        private void OnVideoFinished(VideoPlayer vp)
+    {
+            vp.Stop();
+            videoObject1.SetActive(false);
+            videoObject2.SetActive(false);
+    }
+
+    public void Win()
+    {
+        gameObject.SetActive(false);
+        if(gameObject.name == "NumberGame1")
+        {
+
+            videoPlayer1.Play();
+            videoObject1.SetActive(true);
+            videoPlayer1.time = 0f;
+            videoPlayer1.loopPointReached += OnVideoFinished;
+        }
+        else if(gameObject.name == "NumberGame2")
+        {
+
+            videoPlayer2.Play();
+            videoObject2.SetActive(true);
+            videoPlayer2.time = 0f;
+            videoPlayer2.loopPointReached += OnVideoFinished;
+
         }
     }
 }
